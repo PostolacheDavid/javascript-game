@@ -1,0 +1,42 @@
+/* || RESET */
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+button,
+textarea {
+  font: inherit;
+}
+
+/* || Variables */
+
+/* || UTILITY */
+.offscreen {
+  position: absolute;
+  left: -10000px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.center {
+  text-align: center;
+}
+
+/* || GENERAL STYLES */
+
+body {
+  background: black;
+}
