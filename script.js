@@ -22,6 +22,7 @@ class Player {
   update() {
     this.draw();
     this.position.y += this.velocity.y;
+    this.position.x += this.velocity.x;
     if (this.position.y + this.height + this.velocity.y < canvas.height) {
       this.velocity.y += gravity;
     } else {
@@ -39,13 +40,53 @@ const player2 = new Player({
   y: 100,
 });
 
-let y = 100;
+const keys = {
+  d: {
+    pressed: false,
+  },
+  a: {
+    pressed: false,
+  },
+};
+
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "white";
   c.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
   player2.update();
+
+  player.velocity.x = 0;
+  if (keys.d.pressed) {
+    player.velocity.x = 5;
+  } else if (keys.a.pressed) {
+    player.velocity.x = -5;
+  }
 }
 
 animate();
+
+window.addEventListener("keydown", (e) => {
+  switch (e.key) {
+    case "d":
+      keys.d.pressed = true;
+      break;
+    case "a":
+      keys.a.pressed = true;
+      break;
+    case "w":
+      player.velocity.y = -20;
+      break;
+  }
+});
+
+window.addEventListener("keyup", (e) => {
+  switch (e.key) {
+    case "d":
+      keys.d.pressed = false;
+      break;
+    case "a":
+      keys.a.pressed = false;
+      break;
+  }
+});
