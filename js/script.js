@@ -5,55 +5,35 @@ canvas.width = 1024;
 canvas.height = 576;
 
 const scaledCanvas = {
-  width: canvas.width / 4,
-  height: canvas.height / 4,
+  width: canvas.width,
+  height: canvas.height,
 };
 
+const Collisions2D = [];
+for (let i = 0; i < Collisions.length; i += 54) {
+  Collisions2D.push(Collisions.slice(i, i + 54));
+}
+
+const collisionBlocks = [];
+Collisions2D.forEach((row, y) => {
+  row.forEach((symbol, x) => {
+    if (symbol === 1) {
+      console.log("draw a block here");
+      collisionBlocks.push(
+        new CollisionsBlock({
+          position: {
+            x: x * 32,
+            y: y * 32,
+          },
+        })
+      );
+    }
+  });
+});
+
+console.log(collisionBlocks);
+
 const gravity = 0.5;
-
-class Sprite {
-  constructor({ position, imageSrc }) {
-    this.position = position;
-    this.image = new Image();
-    this.image.src = imageSrc;
-  }
-
-  draw() {
-    if (!this.image) {
-      return;
-    }
-    c.drawImage(this.image, this.position.x, this.position.y);
-  }
-
-  update() {
-    this.draw();
-  }
-}
-
-class Player {
-  constructor(position) {
-    this.position = position;
-    this.velocity = {
-      x: 0,
-      y: 1,
-    };
-    this.height = 100;
-  }
-  draw() {
-    c.fillStyle = "red";
-    c.fillRect(this.position.x, this.position.y, 100, this.height);
-  }
-  update() {
-    this.draw();
-    this.position.y += this.velocity.y;
-    this.position.x += this.velocity.x;
-    if (this.position.y + this.height + this.velocity.y < canvas.height) {
-      this.velocity.y += gravity;
-    } else {
-      this.velocity.y = 0;
-    }
-  }
-}
 
 const player = new Player({
   x: 0,
@@ -87,10 +67,17 @@ function animate() {
   c.fillRect(0, 0, canvas.width, canvas.height);
 
   c.save();
-  c.scale(1, 1);
-  c.translate(0, -background.image.height + 4 * scaledCanvas.height);
+  c.scale(
+    canvas.width / scaledCanvas.width,
+    canvas.height / scaledCanvas.height
+  );
+  c.translate(0, -background.image.height + scaledCanvas.height);
   background.update();
+  collisionBlocks.forEach((collisionBlock) => {
+    collisionBlock.update();
+  });
   c.restore();
+
   player.update();
   player2.update();
 
