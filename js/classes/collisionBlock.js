@@ -8,8 +8,8 @@ class CollisionsBlock {
   }
 
   draw() {
-    c.fillStyle = "rgba(255, 0, 0, 0.5)";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    /* c.fillStyle = "rgba(0, 0, 255, 0.2)";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height); */
   }
 
   update() {

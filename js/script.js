@@ -37,10 +37,13 @@ const gravity = 0.5;
 
 const player = new Player({
   position: {
-    x: 200,
+    x: 150,
     y: 0,
   },
   collisionBlocks,
+  imageSrc: "./img/warrior/Idle.png",
+  frameRate: 8,
+  scale: 2,
 });
 
 const keys = {
@@ -57,7 +60,7 @@ const background = new Sprite({
     x: 0,
     y: 0,
   },
-  imageSrc: "./../img/background_img_upscaled.png",
+  imageSrc: "./img/background_img_upscaled.png",
 });
 
 function animate() {
@@ -70,7 +73,9 @@ function animate() {
     canvas.width / scaledCanvas.width,
     canvas.height / scaledCanvas.height
   );
-  c.translate(0, -background.image.height + scaledCanvas.height);
+  /* const yOffset = Math.min(0, scaledCanvas.height - background.image.height);
+  c.translate(0, yOffset); */
+
   background.update();
   collisionBlocks.forEach((collisionBlock) => {
     collisionBlock.update();
@@ -88,7 +93,9 @@ function animate() {
   c.restore();
 }
 
-animate();
+background.image.addEventListener("load", () => {
+  animate();
+});
 
 window.addEventListener("keydown", (e) => {
   switch (e.key) {
