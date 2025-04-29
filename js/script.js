@@ -41,6 +41,7 @@ const player = new Player({
     y: 0,
   },
   collisionBlocks,
+  imageSrc: "./../img/warrior/Idle.png",
 });
 
 const keys = {
@@ -77,6 +78,7 @@ function animate() {
   });
 
   player.update();
+  c.restore();
 
   player.velocity.x = 0;
   if (keys.d.pressed) {
@@ -84,8 +86,6 @@ function animate() {
   } else if (keys.a.pressed) {
     player.velocity.x = -5;
   }
-
-  c.restore();
 }
 
 animate();
