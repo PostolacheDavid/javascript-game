@@ -37,8 +37,8 @@ const gravity = 0.5;
 
 const player = new Player({
   position: {
-    x: 150,
-    y: 0,
+    x: 80,
+    y: 500,
   },
   collisionBlocks,
   imageSrc: "./img/warrior/Idle.png",
@@ -60,7 +60,7 @@ const background = new Sprite({
     x: 0,
     y: 0,
   },
-  imageSrc: "./img/background_img_upscaled.png",
+  imageSrc: "./img/background_img_modified.png",
 });
 
 function animate() {
@@ -73,8 +73,8 @@ function animate() {
     canvas.width / scaledCanvas.width,
     canvas.height / scaledCanvas.height
   );
-  /* const yOffset = Math.min(0, scaledCanvas.height - background.image.height);
-  c.translate(0, yOffset); */
+  const yOffset = Math.min(0, scaledCanvas.height - background.image.height);
+  c.translate(0, yOffset);
 
   background.update();
   collisionBlocks.forEach((collisionBlock) => {
