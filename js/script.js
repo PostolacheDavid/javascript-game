@@ -18,7 +18,6 @@ const collisionBlocks = [];
 Collisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 1) {
-      console.log("draw a block here");
       collisionBlocks.push(
         new CollisionsBlock({
           position: {
@@ -30,8 +29,6 @@ Collisions2D.forEach((row, y) => {
     }
   });
 });
-
-console.log(collisionBlocks);
 
 const gravity = 0.5;
 
