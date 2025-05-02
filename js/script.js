@@ -1,3 +1,5 @@
+const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
 
@@ -220,3 +222,23 @@ window.addEventListener("keyup", (e) => {
       break;
   }
 });
+
+if (isMobile) {
+  document.getElementById("left").addEventListener("touchstart", () => {
+    keys.a.pressed = true;
+  });
+  document.getElementById("left").addEventListener("touchend", () => {
+    keys.a.pressed = false;
+  });
+
+  document.getElementById("right").addEventListener("touchstart", () => {
+    keys.d.pressed = true;
+  });
+  document.getElementById("right").addEventListener("touchend", () => {
+    keys.d.pressed = false;
+  });
+
+  document.getElementById("jump").addEventListener("touchstart", () => {
+    player.velocity.y = -18;
+  });
+}
