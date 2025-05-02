@@ -35,6 +35,15 @@ class Player extends Sprite {
 
       this.animations[key].image = image;
     }
+
+    this.cameraBox = {
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
+      width: 200,
+      height: 80,
+    };
   }
 
   switchSprite(key) {
@@ -46,9 +55,84 @@ class Player extends Sprite {
     this.frameRate = this.animations[key].frameRate;
   }
 
+  updateCameraBox() {
+    this.cameraBox = {
+      position: {
+        x: this.position.x - 100,
+        y: this.position.y,
+      },
+      width: 800,
+      height: 320,
+    };
+  }
+
+  checkForHorizontalCanvasCollision() {
+    if (
+      this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 1718 ||
+      this.hitbox.position.x + this.velocity.x <= 0
+    ) {
+      this.velocity.x = 0;
+    }
+  }
+
+  shouldPanCameraToTheRight({ camera }) {
+    const cameraboxRightSide = this.cameraBox.position.x + this.cameraBox.width;
+    const screenRightEdge = Math.abs(camera.position.x) + scaledCanvas.width;
+
+    if (cameraboxRightSide >= 1718) return;
+
+    if (cameraboxRightSide >= screenRightEdge) {
+      camera.position.x += this.velocity.x;
+    }
+  }
+
+  shouldPanCameraToTheLeft({ camera }) {
+    const cameraBoxLeftSide = this.cameraBox.position.x;
+    const screenLeftEdge = Math.abs(camera.position.x);
+
+    if (cameraBoxLeftSide <= 0) return;
+
+    if (cameraBoxLeftSide <= screenLeftEdge) {
+      camera.position.x += this.velocity.x;
+    }
+  }
+
+  shouldPanCameraUp({ camera }) {
+    const cameraBoxTop = this.cameraBox.position.y;
+    const screenTop = Math.abs(camera.position.y);
+
+    if (cameraBoxTop <= 0) return;
+
+    if (cameraBoxTop <= screenTop) {
+      camera.position.y -= this.velocity.y;
+    }
+  }
+
+  shouldPanDown({ camera }) {
+    const cameraBoxBottom = this.cameraBox.position.y + this.cameraBox.height;
+    const screenBottom = Math.abs(camera.position.y) + scaledCanvas.height;
+
+    if (cameraBoxBottom >= 1296) return;
+
+    if (cameraBoxBottom >= screenBottom) {
+      camera.position.y -= this.velocity.y;
+    }
+  }
+
   update() {
     this.updateFrames();
     this.updateHitBox();
+
+    this.updateCameraBox();
+
+    //this draws the camera box
+    /* c.fillStyle = "rgba(0, 0, 255, 0.2)";
+    c.fillRect(
+      this.cameraBox.position.x,
+      this.cameraBox.position.y,
+      this.cameraBox.width,
+      this.cameraBox.height
+    ); */
 
     //this draws the image
     /* c.fillStyle = "rgba(0, 255, 0, 0.2)";

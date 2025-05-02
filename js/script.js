@@ -124,6 +124,15 @@ const background = new Sprite({
   imageSrc: "./img/background_img_modified.png",
 });
 
+const backgroundImageHeight = 1296;
+
+const camera = {
+  position: {
+    x: 0,
+    y: scaledCanvas.height - backgroundImageHeight,
+  },
+};
+
 function animate() {
   window.requestAnimationFrame(animate);
   c.fillStyle = "white";
@@ -134,14 +143,15 @@ function animate() {
     canvas.width / scaledCanvas.width,
     canvas.height / scaledCanvas.height
   );
-  const yOffset = Math.min(0, scaledCanvas.height - background.image.height);
-  c.translate(0, yOffset);
+  const yOffset = Math.min(0, camera.position.y);
+  c.translate(-camera.position.x, yOffset);
 
   background.update();
   collisionBlocks.forEach((collisionBlock) => {
     collisionBlock.update();
   });
 
+  player.checkForHorizontalCanvasCollision();
   player.update();
 
   player.velocity.x = 0;
@@ -149,10 +159,12 @@ function animate() {
     player.switchSprite("Run");
     player.velocity.x = 5;
     player.lastDirection = "right";
+    player.shouldPanCameraToTheRight({ camera });
   } else if (keys.a.pressed) {
     player.switchSprite("RunLeft");
     player.velocity.x = -5;
     player.lastDirection = "left";
+    player.shouldPanCameraToTheLeft({ camera });
   } else if (player.velocity.y === 0) {
     if (player.lastDirection === "right") {
       player.switchSprite("Idle");
@@ -162,12 +174,14 @@ function animate() {
   }
 
   if (player.velocity.y < 0) {
+    player.shouldPanCameraUp({ camera });
     if (player.lastDirection === "right") {
       player.switchSprite("Jump");
     } else {
       player.switchSprite("JumpLeft");
     }
   } else if (player.velocity.y > 0) {
+    player.shouldPanDown({ camera });
     if (player.lastDirection === "right") {
       player.switchSprite("Fall");
     } else {
