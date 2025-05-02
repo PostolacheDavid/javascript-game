@@ -14,11 +14,32 @@ for (let i = 0; i < Collisions.length; i += 54) {
   Collisions2D.push(Collisions.slice(i, i + 54));
 }
 
+const platformCollisions2D = [];
+for (let i = 0; i < platformCollisions.length; i += 54) {
+  platformCollisions2D.push(platformCollisions.slice(i, i + 54));
+}
+
 const collisionBlocks = [];
 Collisions2D.forEach((row, y) => {
   row.forEach((symbol, x) => {
     if (symbol === 1) {
       collisionBlocks.push(
+        new CollisionsBlock({
+          position: {
+            x: x * 32,
+            y: y * 32,
+          },
+        })
+      );
+    }
+  });
+});
+
+const platformCollisionBlocks = [];
+platformCollisions2D.forEach((row, y) => {
+  row.forEach((symbol, x) => {
+    if (symbol === 1) {
+      platformCollisionBlocks.push(
         new CollisionsBlock({
           position: {
             x: x * 32,
@@ -38,6 +59,7 @@ const player = new Player({
     y: 500,
   },
   collisionBlocks,
+  platformCollisionBlocks,
   imageSrc: "./img/warrior/Idle.png",
   frameRate: 8,
   scale: 2,

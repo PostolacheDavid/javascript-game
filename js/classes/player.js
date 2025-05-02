@@ -2,6 +2,7 @@ class Player extends Sprite {
   constructor({
     position,
     collisionBlocks,
+    platformCollisionBlocks,
     imageSrc,
     frameRate,
     scale,
@@ -15,6 +16,7 @@ class Player extends Sprite {
     };
 
     this.collisionBlocks = collisionBlocks;
+    this.platformCollisionBlocks = platformCollisionBlocks;
     this.hitbox = {
       position: {
         x: this.position.x,
@@ -38,6 +40,7 @@ class Player extends Sprite {
   switchSprite(key) {
     if (this.image === this.animations[key].image || !this.loaded) return;
 
+    this.currentFrame = 0;
     this.image = this.animations[key].image;
     this.frameBuffer = this.animations[key].frameBuffer;
     this.frameRate = this.animations[key].frameRate;
@@ -48,17 +51,17 @@ class Player extends Sprite {
     this.updateHitBox();
 
     //this draws the image
-    c.fillStyle = "rgba(0, 255, 0, 0.2)";
-    c.fillRect(this.position.x, this.position.y, this.width, this.height);
+    /* c.fillStyle = "rgba(0, 255, 0, 0.2)";
+    c.fillRect(this.position.x, this.position.y, this.width, this.height); */
 
     //this draws the hitbox
-    c.fillStyle = "rgba(255, 0, 0, 0.2)";
+    /* c.fillStyle = "rgba(255, 0, 0, 0.2)";
     c.fillRect(
       this.hitbox.position.x,
       this.hitbox.position.y,
       this.hitbox.width,
       this.hitbox.height
-    );
+    ); */
 
     this.draw();
     this.position.x += this.velocity.x;
@@ -131,6 +134,27 @@ class Player extends Sprite {
             collisionBlock.position.y + collisionBlock.height - offset + 0.01;
           break;
         }
+      }
+    }
+
+    for (let i = 0; i < this.platformCollisionBlocks.length; i++) {
+      const block = this.platformCollisionBlocks[i];
+
+      const isColliding = collision({ object1: this.hitbox, object2: block });
+
+      if (
+        isColliding &&
+        this.velocity.y > 0 &&
+        this.hitbox.position.y + this.hitbox.height <=
+          block.position.y + this.velocity.y
+      ) {
+        this.velocity.y = 0;
+
+        const offset =
+          this.hitbox.position.y - this.position.y + this.hitbox.height;
+
+        this.position.y = block.position.y - offset - 0.01;
+        break;
       }
     }
   }
