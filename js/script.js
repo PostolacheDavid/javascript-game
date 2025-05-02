@@ -57,8 +57,8 @@ const gravity = 0.5;
 
 const player = new Player({
   position: {
-    x: 80,
-    y: 500,
+    x: 100,
+    y: 800,
   },
   collisionBlocks,
   platformCollisionBlocks,
